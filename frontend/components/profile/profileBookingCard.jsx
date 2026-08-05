@@ -1,8 +1,8 @@
 import { useCancelBooking } from "@/hooks/api/useBooking.js";
+import { Ticket, Calendar, MapPin, DollarSign, AlertCircle, CheckCircle2, XCircle } from "lucide-react";
 
 export default function ProfileBookingCard({ booking }) {
-  const { mutateAsync: cancelBooking, isPending } =
-    useCancelBooking();
+  const { mutateAsync: cancelBooking, isPending } = useCancelBooking();
 
   const handleCancel = async () => {
     try {
@@ -12,112 +12,96 @@ export default function ProfileBookingCard({ booking }) {
     }
   };
 
+  const isCancelled = booking.status === "cancelled" || booking.eventId?.status === "cancelled";
+
   return (
-    <div className="border border-border p-4 rounded-xl bg-bg-light">
-      {/* TITLE */}
-      <h3 className="text-h4 text-text-primary">
-        {booking.eventId?.title}
-      </h3>
+    <div className="p-6 rounded-3xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <Ticket className="w-4 h-4 text-indigo-600" />
+            <h3 className="text-lg font-bold text-slate-900">
+              {booking.eventId?.title || "Event Title"}
+            </h3>
+          </div>
+          <p className="text-xs font-semibold text-slate-500">
+            {booking.numberOfSeats} Tickets × {booking.eventId?.price} {booking.eventId?.currency}
+          </p>
+        </div>
 
-      {/* TICKETS */}
-      <p className="text-text-secondary text-small mt-1">
-        {booking.numberOfSeats} tickets ×{" "}
-        {booking.eventId?.price}{" "}
-        {booking.eventId?.currency}
-      </p>
-
-      {/* DATES */}
-      <p className="text-text-primary text-small mt-1">
-        Start Date:{" "}
-        {new Date(
-          booking.eventId?.startDateTime
-        ).toDateString()}
-      </p>
-
-      <p className="text-text-primary text-small mt-1">
-        End Date:{" "}
-        {new Date(
-          booking.eventId?.endDateTime
-        ).toDateString()}
-      </p>
-
-      {/* LOCATION */}
-      <p className="text-text-primary text-small mt-1">
-        Event Location:{" "}
-        {booking.eventId?.location?.address}
-      </p>
-
-      {/* EVENT STATUS */}
-      <p className="text-text-primary text-small mt-1">
-        Event Status: {booking.eventId?.status}
-      </p>
-
-      {/* TOTAL */}
-      <p className="text-text-primary text-small mt-1 font-medium">
-        Total: {booking.totalAmount}{" "}
-        {booking.eventId?.currency}
-      </p>
-
-      {/* STATUS BADGES */}
-      <div className="flex gap-2 mt-3 flex-wrap">
-        {/* BOOKING STATUS */}
-        <span
-          className={`
-            text-small px-2 py-1 rounded
-            ${
+        {/* Status Badges */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span
+            className={`text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider ${
               booking.status === "confirmed"
-                ? "bg-green-100 text-green-700"
+                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                 : booking.status === "cancelled"
-                ? "bg-red-100 text-red-700"
-                : "bg-yellow-100 text-yellow-700"
-            }
-          `}
-        >
-          {booking.status}
-        </span>
+                ? "bg-red-50 text-red-700 border border-red-200"
+                : "bg-amber-50 text-amber-700 border border-amber-200"
+            }`}
+          >
+            {booking.status}
+          </span>
 
-        {/* PAYMENT STATUS */}
-        <span
-          className={`
-            text-small px-2 py-1 rounded
-            ${
+          <span
+            className={`text-xs px-3 py-1 rounded-full font-bold uppercase tracking-wider ${
               booking.paymentStatus === "paid"
-                ? "bg-blue-100 text-blue-700"
+                ? "bg-sky-50 text-sky-700 border border-sky-200"
                 : booking.paymentStatus === "failed"
-                ? "bg-red-100 text-red-700"
-                : "bg-gray-100 text-gray-700"
-            }
-          `}
-        >
-          {booking.paymentStatus}
-        </span>
+                ? "bg-red-50 text-red-700 border border-red-200"
+                : "bg-slate-100 text-slate-700 border border-slate-200"
+            }`}
+          >
+            Payment: {booking.paymentStatus}
+          </span>
+        </div>
       </div>
 
-      {/* CANCELLED MESSAGE */}
-      {(booking.status === "cancelled" ||
-        booking.eventId?.status === "cancelled") && (
-        <p className="text-text-muted text-small mt-2">
-          Booking Cancelled
-        </p>
-      )}
+      {/* Grid Info */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 py-4 text-xs font-medium text-slate-600">
+        <div className="flex items-center gap-2">
+          <Calendar className="w-4 h-4 text-indigo-500 shrink-0" />
+          <span>
+            {new Date(booking.eventId?.startDateTime).toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </span>
+        </div>
 
-      {/* CANCEL BUTTON */}
-      {booking.status !== "cancelled" &&
-        booking.eventId?.status !== "cancelled" && (
+        <div className="flex items-center gap-2">
+          <MapPin className="w-4 h-4 text-pink-500 shrink-0" />
+          <span className="truncate">
+            {booking.eventId?.location?.address || booking.eventId?.location?.city || "Venue TBD"}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <DollarSign className="w-4 h-4 text-emerald-500 shrink-0" />
+          <span className="font-bold text-slate-900">
+            Total: {booking.totalAmount} {booking.eventId?.currency}
+          </span>
+        </div>
+      </div>
+
+      {/* Footer / Actions */}
+      <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+        {isCancelled ? (
+          <span className="inline-flex items-center gap-1.5 text-xs font-bold text-red-500 bg-red-50 px-3 py-1 rounded-xl">
+            <XCircle className="w-4 h-4" />
+            <span>Booking Cancelled</span>
+          </span>
+        ) : (
           <button
             onClick={handleCancel}
             disabled={isPending}
-            className="
-              cursor-pointer mt-4 px-4 py-2 rounded-lg
-              bg-danger text-white text-small
-              hover:opacity-90 disabled:opacity-30
-            "
+            className="cursor-pointer text-xs font-bold text-red-600 hover:text-red-700 hover:bg-red-50 border border-red-200 px-4 py-2 rounded-xl transition-all disabled:opacity-50"
           >
-            {isPending
-              ? "Cancelling..."
-              : "Cancel Booking"}
+            {isPending ? "Cancelling..." : "Cancel Booking"}
           </button>
         )}
+      </div>
     </div>
   );
 }

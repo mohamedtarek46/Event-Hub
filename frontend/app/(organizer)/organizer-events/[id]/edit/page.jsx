@@ -9,7 +9,7 @@ export default function Page() {
   if (isPending || isLoading) return <LoadingPage/>;
   if (!data.event) return notFound();
   return (
-    <div className="py-10 bg-bg-light min-h-screen">
+    <div className="bg-slate-50/60 min-h-screen py-10 px-6">
       <EventForm mode="edit" initialData={data.event} />
     </div>
   );

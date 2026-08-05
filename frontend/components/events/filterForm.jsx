@@ -28,20 +28,20 @@ const FilterForm = ({ closeForm }) => {
       
       </div>
 
-      <div className="flex justify-between mb-8 md:mb-0">
+      <div className="flex items-center justify-between pt-4 mt-6 border-t border-slate-100">
         <button
           type="reset"
-          className="font-semibold hover:cursor-pointer"
+          className="text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
           onClick={() => {
             setClear();
             if (closeForm) closeForm();
           }}
         >
-          Clear All
+          Reset Filters
         </button>
-        <button className="bg-primary py-4 px-8 text-white rounded-xl font-poppins flex gap-2.5 items-center hover:cursor-pointer hover:scale-105 duration-200">
-          <p>Apply</p>
-          <BsChevronRight className="text-white" />
+        <button className="bg-slate-900 hover:bg-slate-800 py-2.5 px-5 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
+          <span>Apply Filters</span>
+          <BsChevronRight className="text-white text-xs" />
         </button>
       </div>
     </form>

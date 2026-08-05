@@ -26,19 +26,14 @@ export default function ProfilePage() {
 
 
   return (
-    <div className="container py-10">
-      <ProfileHeader user={user} />
+    <div className="bg-slate-50/60 min-h-screen py-10">
+      <div className="max-w-4xl mx-auto px-6 space-y-6">
+        <ProfileHeader user={user} />
+        <ProfileTabs tab={tab} setTab={setTab} />
 
-      <ProfileTabs tab={tab} setTab={setTab} />
-
-      {tab === "profile" && (
-        <ProfileForm user={user}  />
-      )}
-
-      {tab === "bookings" && (
-        <BookingsList userId={user._id} /> 
-
-      )}
+        {tab === "profile" && <ProfileForm user={user} />}
+        {tab === "bookings" && <BookingsList userId={user._id} />}
+      </div>
     </div>
   );
 }

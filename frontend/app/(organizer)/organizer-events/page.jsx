@@ -14,8 +14,10 @@ const Page = () => {
     return notFound();
   }
   return (
-    <div className="container py-10 space-y-10">
-      <EventsList events={data} />
+    <div className="bg-slate-50/60 min-h-screen py-10">
+      <div className="max-w-6xl mx-auto px-6 space-y-6">
+        <EventsList events={data} />
+      </div>
     </div>
   );
 };

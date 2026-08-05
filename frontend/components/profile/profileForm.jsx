@@ -1,8 +1,10 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useUpdateMe } from "@/hooks/api/useUsers.js";
-export default function ProfileForm({ user, mutate }) {
-  const { mutateAsync: updateMe } = useUpdateMe();
+import { User, Save } from "lucide-react";
+
+export default function ProfileForm({ user }) {
+  const { mutateAsync: updateMe, isPending } = useUpdateMe();
   const formik = useFormik({
     initialValues: {
       firstName: user?.firstName || "",
@@ -35,47 +37,61 @@ export default function ProfileForm({ user, mutate }) {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className="mt-6 space-y-4 max-w-md">
-      {/* First Name */}
-      <div>
-        <input
-          name="firstName"
-          value={formik.values.firstName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className="w-full border border-border p-3 rounded-lg"
-          placeholder="First name"
-        />
-
-        {formik.touched.firstName && formik.errors.firstName && (
-          <p className="text-red-500 text-sm mt-1">{formik.errors.firstName}</p>
-        )}
+    <div className="mt-6 p-6 md:p-8 rounded-3xl bg-white border border-slate-100 shadow-sm max-w-xl">
+      <div className="flex items-center gap-2 mb-6">
+        <User className="w-5 h-5 text-indigo-600" />
+        <h2 className="text-lg font-bold text-slate-900">Personal Details</h2>
       </div>
 
-      {/* Last Name */}
-      <div>
-        <input
-          name="lastName"
-          value={formik.values.lastName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className="w-full border border-border p-3 rounded-lg"
-          placeholder="Last name"
-        />
+      <form onSubmit={formik.handleSubmit} className="space-y-5">
+        {/* First Name */}
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+            First Name
+          </label>
+          <input
+            name="firstName"
+            value={formik.values.firstName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition-all"
+            placeholder="Enter first name"
+          />
 
-        {formik.touched.lastName && formik.errors.lastName && (
-          <p className="text-red-500 text-sm mt-1">{formik.errors.lastName}</p>
-        )}
-      </div>
+          {formik.touched.firstName && formik.errors.firstName && (
+            <p className="text-red-500 text-xs mt-1.5 font-medium">{formik.errors.firstName}</p>
+          )}
+        </div>
 
-      {/* Submit */}
-      <button
-        type="submit"
-        disabled={!formik.isValid}
-        className="bg-primary cursor-pointer text-white px-4 py-2 rounded-lg hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        Save Changes
-      </button>
-    </form>
+        {/* Last Name */}
+        <div>
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+            Last Name
+          </label>
+          <input
+            name="lastName"
+            value={formik.values.lastName}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className="w-full bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 rounded-xl px-4 py-3 text-sm text-slate-900 font-medium outline-none transition-all"
+            placeholder="Enter last name"
+          />
+
+          {formik.touched.lastName && formik.errors.lastName && (
+            <p className="text-red-500 text-xs mt-1.5 font-medium">{formik.errors.lastName}</p>
+          )}
+        </div>
+
+        {/* Submit */}
+        <button
+          type="submit"
+          disabled={!formik.isValid || isPending}
+          className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-pink-500 hover:from-indigo-700 hover:to-pink-600 text-white font-bold px-6 py-3 rounded-xl shadow-md shadow-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer text-sm"
+        >
+          <Save className="w-4 h-4" />
+          <span>{isPending ? "Saving..." : "Save Changes"}</span>
+        </button>
+      </form>
+    </div>
   );
 }

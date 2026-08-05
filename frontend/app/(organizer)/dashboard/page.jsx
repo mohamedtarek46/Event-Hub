@@ -17,10 +17,11 @@ const Page = () => {
   const recentBookings = data?.recentBookings || [];
 
   return (
-    <div className="container py-10 space-y-10">
-      <StatsCards stats={stats} />
-
-      <RecentBookings bookings={recentBookings} />
+    <div className="bg-slate-50/60 min-h-screen py-10">
+      <div className="max-w-6xl mx-auto px-6 space-y-8">
+        <StatsCards stats={stats} />
+        <RecentBookings bookings={recentBookings} />
+      </div>
     </div>
   );
 };

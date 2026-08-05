@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import dns from "dns";
+
+// Fix Node.js DNS resolution issue for MongoDB SRV records on certain networks/ISPs
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 let cached = global.mongoose;
 

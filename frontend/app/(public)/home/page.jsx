@@ -6,7 +6,7 @@ import HowItWorks from "@/components/home/howItWorks.jsx";
 
 const page = () => {
   return (
-    <main className="bg-gray-50">
+    <main className="bg-slate-50 min-h-screen">
       <HeroSection />
       <FeaturedEvents />
       <Categories />

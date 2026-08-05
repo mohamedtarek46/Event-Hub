@@ -32,7 +32,7 @@ const PriceSection = () => {
   );
 
   return (
-    <div className="w-full max-w-md bg-white ">
+    <div className="w-full max-w-md">
       <input
         type="number"
         className="hidden"

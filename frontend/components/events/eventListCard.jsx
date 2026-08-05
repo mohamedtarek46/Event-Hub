@@ -19,57 +19,75 @@ const EventCard = memo(({ event }) => {
   return (
     <div
       onClick={(e) => handleClick(e)}
-      className="cursor-pointer relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow overflow-hidden"
+      className="group cursor-pointer relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col justify-between"
     >
       {isPending && (
-        <div className="inset-0 bg-white/50 z-50 absolute rounded-2xl flex justify-center items-center">
-          <div className="size-10 border-t-2 animate-spin rounded-full opacity-100" />
+        <div className="inset-0 bg-white/70 backdrop-blur-sm z-50 absolute rounded-3xl flex justify-center items-center">
+          <div className="size-10 border-2 border-indigo-600 border-t-transparent animate-spin rounded-full" />
         </div>
       )}
-      <div className="relative h-58 md:h-80 rounded-2xl overflow-hidden">
-        <Image
-          src={event.imageUrl}
-          alt="Product"
-          className="z-1"
-          fill
-          onError={() => {
-            setError(true);
-          }}
-        />
-        {error && (
-          <div className="absolute inset-0 z-100 flex flex-col items-center justify-center gap-2 rounded-xl bg-gray-900/70 backdrop-blur-sm text-white">
-            <h3 className="text-sm font-semibold">Failed to load image</h3>
-            <p className="text-xs text-gray-300">Please try again later</p>
+      <div>
+        <div className="relative h-48 md:h-56 rounded-t-3xl overflow-hidden bg-slate-100">
+          <Image
+            src={event.imageUrl}
+            alt={event.title || "Event Image"}
+            className="z-1 object-cover group-hover:scale-105 transition-transform duration-500"
+            fill
+            onError={() => {
+              setError(true);
+            }}
+          />
+          {error && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-1 rounded-t-3xl bg-slate-100 text-slate-500">
+              <h3 className="text-xs font-semibold">Image unavailable</h3>
+            </div>
+          )}
+          
+          {/* Overlay Category Tag */}
+          {event.categoryId?.name && (
+            <div className="absolute top-3 left-3 z-10 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-bold tracking-wider flex items-center gap-1.5 shadow-sm">
+              <BiCategoryAlt className="size-3.5 text-indigo-400" />
+              <span>{event.categoryId.name}</span>
+            </div>
+          )}
+
+          {/* Price Badge */}
+          <div className="absolute bottom-3 right-3 z-10 px-3.5 py-1 rounded-full bg-indigo-600 text-white text-xs font-extrabold shadow-md">
+            {event.price ? `${event.price} ${event.currency || "$"}` : "Free"}
           </div>
-        )}
-        <div className="absolute inset-0 bg-white z-0 flex justify-center items-center">
-          <div className="size-10 border-t animate-spin rounded-full" />
         </div>
-      </div>
-      <div className="p-3 pb-8">
-        <p className="text-[16px] font-semibold font-inter mt-1 md:text[15px]">
-          {event.title}
-        </p>
-        <div className="text-xs flex gap-x-2 font-semibold font-inter text-gray-500 mt-1">
-          <BiCategoryAlt className="size-4 " />
-          {event.categoryId.name}
-        </div>
-        <div className="text-xs flex gap-x-2 font-semibold font-inter text-gray-500 mt-1">
-          <CalendarRange className="size-4 " />
-          {new Date(event.startDateTime).toLocaleString()}
-        </div>
-        <div className="text-xs flex gap-x-2 font-semibold font-inter text-gray-500 mt-1">
-          <MapPin className="size-4 " />
-          {event.location.city}
-        </div>
-        <div className="text-xs flex gap-x-2 font-semibold font-inter text-gray-500 mt-1">
-          <Users className="size-4 " />
-          {event.capacity - event.availableSeats}
-        </div>
-        <div className="flex justify-between absolute bottom-2 right-2">
-          <p className="text-[13px] font-semibold font-inter md:text-[17px]">
-            {event.price} {event.currency}
-          </p>
+
+        <div className="p-5">
+          <h3 className="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition-colors line-clamp-1">
+            {event.title}
+          </h3>
+
+          <div className="mt-3 space-y-2 text-xs text-slate-600 font-medium">
+            <div className="flex items-center gap-2">
+              <CalendarRange className="size-4 text-indigo-600 shrink-0" />
+              <span>
+                {new Date(event.startDateTime).toLocaleDateString("en-US", {
+                  weekday: "short",
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}{" "}
+                •{" "}
+                {new Date(event.startDateTime).toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="size-4 text-pink-500 shrink-0" />
+              <span className="line-clamp-1">{event.location?.city || "Online / Venue TBD"}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Users className="size-4 text-violet-600 shrink-0" />
+              <span>{event.capacity ? `${event.capacity - (event.availableSeats || 0)} attending` : "Open registration"}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
