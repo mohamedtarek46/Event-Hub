@@ -1,31 +1,19 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useState, memo } from "react";
-import { useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { Users, MapPin, CalendarRange } from "lucide-react";
 import { BiCategoryAlt } from "react-icons/bi";
+
 const EventCard = memo(({ event }) => {
   const [error, setError] = useState(false);
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-  const handleClick = (e) => {
-    e.preventDefault();
-    startTransition(() => {
-      router.push(`/events/${event._id}`);
-    });
-  };
+
   return (
-    <div
-      onClick={(e) => handleClick(e)}
-      className="group cursor-pointer relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col justify-between"
+    <Link
+      href={`/events/${event._id}`}
+      className="group cursor-pointer relative bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col justify-between block"
     >
-      {isPending && (
-        <div className="inset-0 bg-white/70 backdrop-blur-sm z-50 absolute rounded-3xl flex justify-center items-center">
-          <div className="size-10 border-2 border-indigo-600 border-t-transparent animate-spin rounded-full" />
-        </div>
-      )}
       <div>
         <div className="relative h-48 md:h-56 rounded-t-3xl overflow-hidden bg-slate-100">
           <Image
@@ -90,7 +78,7 @@ const EventCard = memo(({ event }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 });
 EventCard.displayName = "EventCard";
